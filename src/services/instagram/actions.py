@@ -24,7 +24,7 @@ def connect(username: str, password: str) -> Chrome:
         
         driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
         driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
-        driver.find_element(By.XPATH, "button[type='submit']").click()
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
         sleep(10)
 
 
