@@ -33,4 +33,4 @@ def download_chromedriver(version_number: str, os_binary: str = "linux64"):
     
 if __name__ == '__main__':
     version_number = get_latest_chromedriver_version()
-    download_chromedriver("102.0.5005.61")
+    download_chromedriver("105.0.5195.52")
