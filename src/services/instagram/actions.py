@@ -1,4 +1,5 @@
 from time import sleep
+import time
 from typing import List
 
 from selenium.webdriver import Chrome
@@ -39,7 +40,29 @@ def like_post(driver: Chrome, post_url:str) -> None:
     print("Post liked with success.")
 
 
-def comment_post(post_url:str, comment: str) -> None:
+def comment_post(driver: Chrome, post_url:str, comment: str) -> None:
+    """Comments a post with its url.
+        # Returns
+        - None if everything went well
+    """
+    driver.get(post_url)
+    driver.implicitly_wait(5)
+    
+    driver.find_element(
+        By.CSS_SELECTOR,
+        "form[method='post'] textarea" # Comment input
+    ).send_keys(comment)
+    time.sleep(1)
+    
+    driver.find_element(
+        By.CSS_SELECTOR,
+        "button[type='submit']" # Post button
+    ).click()
+    
+    print("Comment sent with success.")
+
+
+def share_post_in_story(driver: Chrome, post_url: str) -> None:
     """Comments a post with its url.
         # Returns
         - None if everything went well
@@ -47,23 +70,22 @@ def comment_post(post_url:str, comment: str) -> None:
     pass
 
 
-def share_post_in_story(post_url: str) -> None:
-    """Comments a post with its url.
-        # Returns
-        - None if everything went well
-    """
-    pass
-
-
-def subscribe_to_user(user: str) -> None:
+def subscribe_to_user(driver: Chrome, user: str) -> None:
     """Subscribes to a user with its uuid."""
     pass
 
 
-def subscribe_to_multiple_users(users: List[str]) -> None:
+def subscribe_to_multiple_users(driver: Chrome, users: List[str]) -> None:
     for user in users:
-        subscribe_to_user(user)
+        subscribe_to_user(driver, user)
 
+
+def get_post_content(driver: Chrome, post_url: str) -> str:
+    """Gets the content of a post.
+        # Returns
+        - The post content
+    """
+    pass
 
 if __name__ == '__main__':
     connect(env.INSTA_USERNAME, env.INSTA_PASSWORD)
