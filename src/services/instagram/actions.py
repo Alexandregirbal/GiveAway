@@ -12,29 +12,31 @@ import src.configs.environment_variables as env
 def connect(username: str, password: str) -> Chrome:
     """Connects to Instagram with user credentials"""
     driver = Chrome(service= ChromeService(CHROMEDRIVER_PATH))
-    with driver:
-        driver.get("https://www.instagram.com/")
-        driver.implicitly_wait(5)
-        
-        # Accept cookies
-        try:
-            driver.find_element(By.XPATH, "//button[text()='Only allow essential cookies']").click()
-        except NoSuchElementException:
-            pass
-        
-        driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
-        driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
-        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
-        sleep(10)
+    driver.get("https://www.instagram.com/")
+    driver.implicitly_wait(5)
+    
+    # Accept cookies
+    try:
+        driver.find_element(By.XPATH, "//button[text()='Only allow essential cookies']").click()
+    except NoSuchElementException:
+        pass
+    
+    driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
+    driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
+    driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+    sleep(10)
+    return driver
 
 
-
-def like_post(post_url:str) -> None:
+def like_post(driver: Chrome, post_url:str) -> None:
     """Likes a post with its url.
         # Returns
         - None if everything went well
     """
-    pass
+    driver.get(post_url)
+    driver.implicitly_wait(5)
+    driver.find_element(By.CSS_SELECTOR, "span > svg[aria-label='Like']").click()
+    print("Post liked with success.")
 
 
 def comment_post(post_url:str, comment: str) -> None:
