@@ -1,32 +1,34 @@
 [
     {
-        "description": "A",
-        "level": "",
-        "content": "I am a A comment"
+        "level": 0,
+        "content": "🤞"
     },
     {
-        "description": "B",
-        "level": "",
-        "content": "I am a B comment"
+        "level": 0,
+        "content": "💪"
     },
     {
-        "description": "C",
-        "level": "",
-        "content": "I am a C comment"
+        "level": 0,
+        "content": "😍"
     },
     {
-        "description": "D",
-        "level": "",
-        "content": "I am a D comment"
+        "level": 0,
+        "content": "🍀"
     },
     {
-        "description": "E",
-        "level": "",
-        "content": "I am a E comment"
+        "level": 1,
+        "content": "Je participe! 😁"
     },
     {
-        "description": "F",
-        "level": "",
-        "content": "I am a F comment"
+        "level": 1,
+        "content": "Je suis chaud! 😍"
+    },
+    {
+        "level": 1,
+        "content": "Allons y! 😎"
+    },
+    {
+        "level": 1,
+        "content": "Ca me donne trop envie! 😋"
     }
 ]
