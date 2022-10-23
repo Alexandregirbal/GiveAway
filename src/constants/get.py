@@ -28,19 +28,23 @@ def _get_comment_content(comment: dict) -> str:
     return comment.get("content")
 
 
-def get_random_comments(length: int = 1, level: int = 0) -> str:
+def get_random_comments(length: int = 1, level: int = -1) -> List[str]:
     """Gets a random comment from the comments.json file.
         Returns 1 comment by default.
     """
     comments = _get_comments_from_json()
-        
-    filtered_comments = list(filter(lambda comment: comment.get("level") == level, comments))
+    
+    if level == -1:
+        filtered_comments = comments
+    else:
+        filtered_comments = list(filter(lambda comment: comment.get("level") == level, comments))
+    
     shuffle(filtered_comments)
     
     return list(map(_get_comment_content, filtered_comments))[:length]
 
 
-def get_random_friends(length: int = 2) -> str:
+def get_random_friends(length: int = 2) -> List[str]:
     """Gets a random friend from the friends.json file.
         Returns 2 friends by default.
     """
