@@ -1,34 +1,18 @@
 [
     {
-        "level": 0,
-        "content": "🤞"
-    },
-    {
-        "level": 0,
-        "content": "💪"
-    },
-    {
-        "level": 0,
-        "content": "😍"
-    },
-    {
-        "level": 0,
-        "content": "🍀"
+        "level": 1,
+        "content": "Je participe!"
     },
     {
         "level": 1,
-        "content": "Je participe! 😁"
+        "content": "Je suis chaud!"
     },
     {
         "level": 1,
-        "content": "Je suis chaud! 😍"
+        "content": "Allons y!"
     },
     {
         "level": 1,
-        "content": "Allons y! 😎"
-    },
-    {
-        "level": 1,
-        "content": "Ca me donne trop envie! 😋"
+        "content": "Ca me donne trop envie!"
     }
 ]
