@@ -25,7 +25,7 @@ def find_giveaway_posts(search_filters: List[Any], limit: str = 1000) -> List[st
         for a_element in a_elements:
             href = a_element.get_attribute("href")
             print(href)
-            result.append(href)
+            result.append(href.replace("https://www.instagram.com/p/", "").replace("/", ""))
     
     return result
 
@@ -44,3 +44,14 @@ def get_post_comments(post_url:str, limit: str = 1000): # Maybe only the number 
         - A list of the posts urls
     """
     pass
+
+def get_post_content(driver: Chrome, post_url: str) -> str:
+    """Gets the content of a post
+        # Returns
+        - A string containing the post content
+    """
+    driver.get(post_url)
+    driver.implicitly_wait(5)
+    
+    content_element = driver.find_elements(By.CSS_SELECTOR, "div._a9zs")[0]
+    return content_element.text
