@@ -1,4 +1,6 @@
 import logging
+
+from services.database.insert import insert_in_giveaways
 logging.basicConfig(level=logging.INFO)
 
 
@@ -24,14 +26,14 @@ def main():
             like_post(driver, post_url)
             comment = get_random_comments()[0]
             friends = get_random_friends()
-            full_comment = comment + " @" + " @".join(friends)
+            full_comment = comment + " ".join(friends)
             comment_post(driver, post_url, full_comment)
             content = get_post_content(driver, post_url)
             users_to_subscribe_to = extract_unique_attags_from_content(content)
             subscribe_to_multiple_users(driver, users_to_subscribe_to[:MAX_NUMBER_OF_SUBSCIRBTIONS])
     
-    # TODO: add post ids to DB
-    # Setup scheduler to optimize
+    for post_id in giveaway_posts:
+        insert_in_giveaways([{"id": post_id}])
 
 
 if __name__ == "__main__":

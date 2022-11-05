@@ -20,8 +20,8 @@ def find_giveaway_posts(search_filters: List[Any], limit: str = 1000) -> List[st
         driver.get("https://www.instagram.com/explore/tags/concours/")
         driver.implicitly_wait(5)
         time.sleep(10)
-        all_giveways = "article div div div div a"
-        a_elements = driver.find_elements(By.CSS_SELECTOR, all_giveways)
+        all_giveaways = "article div div div div a"
+        a_elements = driver.find_elements(By.CSS_SELECTOR, all_giveaways)
         for a_element in a_elements:
             href = a_element.get_attribute("href")
             print(href)
@@ -31,7 +31,7 @@ def find_giveaway_posts(search_filters: List[Any], limit: str = 1000) -> List[st
 
 
 def get_post_info(url: str) -> PostInfo:
-    """Gets the basic info for a giveway post
+    """Gets the basic info for a giveaway post
         # Returns
         - A dict containing information about the post at a moment T ...
     """
