@@ -30,7 +30,7 @@ def insert_in_giveaways(giveaways: pd.DataFrame) -> None:
     """Inserts giveaways in the database."""
     for field in MANDATORY_FIELDS.get("giveaways"):
         if field not in giveaways.columns:
-            raise ValueError(f"Field {field} is not in the dataframe.")
+            raise ValueError(f"Field '{field}' is not in the dataframe.")
     
     for giveaway in giveaways.to_dict("records"):
         insert_data("giveaways", giveaway)
@@ -40,6 +40,6 @@ def insert_in_giveaways(giveaways: pd.DataFrame) -> None:
 
 if __name__ == "__main__":
     insert_in_giveaways(pd.DataFrame([
-        {"id": "CkDEZaJMpR9"},
-        {"id": "Cj-rwM-MDnk"}
+        {"id": "Test_id_1"},
+        {"id": "Test_id_2"}
     ]))

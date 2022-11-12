@@ -1,5 +1,7 @@
 import logging
 
+import pandas as pd
+
 from services.database.insert import insert_in_giveaways
 logging.basicConfig(level=logging.INFO)
 
@@ -16,7 +18,8 @@ MAX_NUMBER_OF_SUBSCIRBTIONS = 5
 def main():
     logging.info("Starting bot ...")
     giveaway_posts = find_giveaway_posts(None)
-    # giveaway_posts = ['CkDEZaJMpR9', 'Cj-rwM-MDnk', 'CkA-WUnqxTH', 'CkBqDOtMYDm', 'CkAOlhZqDDv', 'CkBZ3mEokIG', 'CkDJSwkKA_z', 'CkDVXfwq7qX', 'Cj-6SYNMKK6']
+    print(giveaway_posts)
+    # giveaway_posts = ['Cki9RN7Ka84', 'Cki4HgOoZgj', 'CkjAyBjM_WZ', 'Cki_AUpK7Ve', 'Ckgn25aKYk8', 'CkiCy3VsVR1', 'CkiLe6Vo62g', 'CkgrG03MKAe', 'CkiNNgZKJY7', 'CklwKKupkA_', 'CklwFZFrj5F', 'CklvysNqjXi', 'CklvNfascJS', 'CklvL81Ngfr', 'Ckluyi6Ih_O', 'Cklur5OKlot', 'CkluqFzjLk0', 'CkluYGfqkF0', 'CkluH7ioPwZ', 'CkluDloMlhC', 'CkluAdeN6eT', 'Cklt_Vcq339', 'Cklt-cEqsEB', 'CkltkVBoZVk', 'CkltiZnq9nv', 'CkltcxdNJ79', 'CkltLNdLNsX', 'CkltA4aqDvH', 'CkltAUPMUtw', 'Ckls6Z1qJi3', 'Ckls6YdrScB', 'Ckls3G9rGsU', 'Ckls18yoITf']
     logging.info(f"Found {len(giveaway_posts)} giveaway posts.")
     
     driver = connect(INSTA_USERNAME, INSTA_PASSWORD)
@@ -32,8 +35,9 @@ def main():
             users_to_subscribe_to = extract_unique_attags_from_content(content)
             subscribe_to_multiple_users(driver, users_to_subscribe_to[:MAX_NUMBER_OF_SUBSCIRBTIONS])
     
-    for post_id in giveaway_posts:
-        insert_in_giveaways([{"id": post_id}])
+    insert_in_giveaways(pd.DataFrame(
+        [{"id": post_id} for post_id in giveaway_posts]
+    ))
 
 
 if __name__ == "__main__":
