@@ -4,8 +4,9 @@ from typing import List
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service as ChromeService
+from services.instagram.utils import driver_get_if_not_here_already, get_post_url_from_id
 
 from src.configs.selenium_options import CHROMEDRIVER_PATH
 import src.configs.environment_variables as env
@@ -24,28 +25,40 @@ def connect(username: str, password: str) -> Chrome:
     
     driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
     driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
-    driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
-    sleep(10)
+    login_element = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    try: 
+        login_element.click()
+    except ElementClickInterceptedException:
+        login_element.click()
+        
+    sleep(8)
     return driver
 
 
-def like_post(driver: Chrome, post_url:str) -> None:
+def like_post(driver: Chrome, post_id:str) -> None:
     """Likes a post with its url.
         # Returns
         - None if everything went well
     """
-    driver.get(post_url)
+    driver_get_if_not_here_already(driver, get_post_url_from_id(post_id))
     driver.implicitly_wait(5)
-    driver.find_element(By.CSS_SELECTOR, "span > svg[aria-label='Like']").click()
-    print("Post liked with success.")
+    
+    try: 
+        driver.find_element(By.CSS_SELECTOR, "span > svg[aria-label='Like']").click()
+        print("Post liked with success.")
+    except NoSuchElementException:
+        driver.find_element(By.CSS_SELECTOR, "span > svg[aria-label='Unlike']")
+        print("Post already liked.")
+    
+    return
 
 
-def comment_post(driver: Chrome, post_url:str, comment: str) -> None:
+def comment_post(driver: Chrome, post_id:str, comment: str) -> None:
     """Comments a post with its url.
         # Returns
         - None if everything went well
     """
-    driver.get(post_url)
+    driver_get_if_not_here_already(driver, get_post_url_from_id(post_id))
     driver.implicitly_wait(5)
     
     driver.find_element(
@@ -74,10 +87,38 @@ def subscribe_to_user(driver: Chrome, user: str) -> None:
     """Subscribes to a user with its name."""
     username = user.replace("@", "")
     driver.get(f"https://www.instagram.com/{username}")
-    driver.implicitly_wait(5)
+    time.sleep(3)
     
-    driver.find_element(By.CSS_SELECTOR, "button._acan._acap._acas").click()
+    driver.find_element(
+        By.CSS_SELECTOR,
+        "button._acan._acap._acas"
+    ).click() # Subscribe button
+    time.sleep(2)
     
+    try:
+        driver.find_element(
+            By.CSS_SELECTOR,
+            "_acan _acap _acat"
+        ).click() # Unsubscribe button
+        print("Subscribed to user with success.")
+    except NoSuchElementException:
+        print("Could not subscribe to user. Trying to understand why...")
+        try:
+            error_element = driver.find_element(
+                By.CSS_SELECTOR,
+                "div > h3"
+            )
+            print(error_element.text)
+            if error_element.text == "Try Again Later":
+                no_subscribe_reason = "Instagram temporarily blocked new subscriptions."
+            else:
+                no_subscribe_reason = f"Message: {error_element.text}"
+        
+        except NoSuchElementException:
+            no_subscribe_reason = "Reason unknown"
+            print(f"No idea what happened. Please check manually for this user: {user}")
+        
+        raise Exception(f"Could not subscribe to user ({no_subscribe_reason}).")
 
 
 def subscribe_to_multiple_users(driver: Chrome, users: List[str]) -> None:

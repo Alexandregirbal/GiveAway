@@ -1,9 +1,13 @@
+from datetime import datetime
 from typing import TypedDict
 
 
+class Media(TypedDict):
+    url: str
+    alt: str
 class PostInfo(TypedDict):
+    id: str # uuid
     author: str # uuid
-    media: str # url
-    media_tags: str
-    content: str
-    likes: int
+    media: Media # many urls for different formats
+    content: str # post content
+    publish_datetime: datetime # last edit datetime

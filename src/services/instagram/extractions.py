@@ -15,7 +15,7 @@ def extract_unique_attags_from_content(content: str) -> List[str]:
         >>> extract_unique_attags_from_content("Picture from @instagram_user_1, thanks @instagram_user_2 for participating, thanks again @instagram_user_1.")
         # Returns: ['instagram_user_1', 'instagram_user_2']
     """
-    regex = r"@[a-zA-Z0-9_]+"
+    regex = r"@[a-zA-Z0-9_.]+"
     return list(set(re.findall(regex, content)))
 
 
@@ -51,5 +51,6 @@ def extract_unique_dates_from_content(content: str) -> List[Tuple[str, datetime.
     
 
 if __name__ == "__main__":
-    res = extract_unique_dates_from_content("Picture from @instagram_user_1. taken the 22nd of July, see you on the 2nd of September")
-    print(res)
+    # res = extract_unique_dates_from_content("Picture from @instagram_user_1. taken the 22nd of July, see you on the 2nd of September")
+    # print(res)
+    print(extract_unique_attags_from_content("helloooo @inspi.mi coucou"))

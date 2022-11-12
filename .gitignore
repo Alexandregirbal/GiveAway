@@ -131,4 +131,4 @@ dmypy.json
 # Selenium
 chromedriver
 
-database/
+/database

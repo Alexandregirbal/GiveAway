@@ -21,7 +21,6 @@ def insert_data(table: str, data: List[dict] | dict ) -> None:
     with open(table_filepath, "a") as file:
         
         parsed_data = ";".join([str(value) for value in data.values()])
-        print(parsed_data)
         file.write(parsed_data)
         file.write("\n")
 
@@ -40,6 +39,6 @@ def insert_in_giveaways(giveaways: pd.DataFrame) -> None:
 
 if __name__ == "__main__":
     insert_in_giveaways(pd.DataFrame([
-        {"id": "Test_id_1"},
-        {"id": "Test_id_2"}
+        {"id": "Test_id_1", "author": "Test_author_1"},
+        {"id": "Test_id_2", "author": "Test_author_2"}
     ]))
