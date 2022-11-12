@@ -2,7 +2,15 @@ import json
 import os
 from random import shuffle
 from typing import List
-from src.configs.environment_variables import PROJECT_ROOT
+
+from configs.environment_variables import PROJECT_ROOT
+
+### CONSTANTS ###
+
+MAX_NUMBER_OF_SUBSCIRBTIONS_PER_GIVEAWAY = 5
+
+
+### FROM FILES ###
 
 def _load_json_file(file_path: str) -> dict:
     """Loads a json file and returns its content"""

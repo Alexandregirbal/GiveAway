@@ -6,6 +6,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service as ChromeService
+from services.instagram.exceptions import BlockedByInstagramException
 from services.instagram.utils import driver_get_if_not_here_already, get_post_url_from_id
 
 from src.configs.selenium_options import CHROMEDRIVER_PATH
@@ -110,9 +111,9 @@ def subscribe_to_user(driver: Chrome, user: str) -> None:
             )
             print(error_element.text)
             if error_element.text == "Try Again Later":
-                no_subscribe_reason = "Instagram temporarily blocked new subscriptions."
-            else:
-                no_subscribe_reason = f"Message: {error_element.text}"
+                raise BlockedByInstagramException()
+            
+            no_subscribe_reason = f"Message: {error_element.text}"
         
         except NoSuchElementException:
             no_subscribe_reason = "Reason unknown"
