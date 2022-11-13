@@ -13,6 +13,7 @@ from services.instagram.scraping import get_post_info
 
 
 def participate_to_giveaway(
+    account: str,
     connected_account_driver: Chrome,
     post_id: str,
 ) -> PostInfo:
@@ -38,6 +39,7 @@ def participate_to_giveaway(
         post_infos["content"]
     )
     subscribe_to_multiple_users(
+        account,
         connected_account_driver,
         users_to_subscribe_to[:MAX_NUMBER_OF_SUBSCIRBTIONS_PER_GIVEAWAY]
     )

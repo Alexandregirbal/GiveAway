@@ -6,6 +6,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service as ChromeService
+from services.instagram.classes import AccountActionStats
 from services.instagram.exceptions import BlockedByInstagramException
 from services.instagram.utils import driver_get_if_not_here_already, get_post_url_from_id
 
@@ -84,7 +85,7 @@ def share_post_in_story(driver: Chrome, post_url: str) -> None:
     pass
 
 
-def subscribe_to_user(driver: Chrome, user: str) -> None:
+def _subscribe_to_user(driver: Chrome, user: str, account_stats: AccountActionStats) -> None:
     """Subscribes to a user with its name."""
     username = user.replace("@", "")
     driver.get(f"https://www.instagram.com/{username}")
@@ -102,6 +103,8 @@ def subscribe_to_user(driver: Chrome, user: str) -> None:
             "_acan _acap _acat"
         ).click() # Unsubscribe button
         print("Subscribed to user with success.")
+        account_stats.increment_subscriptions_counter()
+    
     except NoSuchElementException:
         print("Could not subscribe to user. Trying to understand why...")
         try:
@@ -122,9 +125,10 @@ def subscribe_to_user(driver: Chrome, user: str) -> None:
         raise Exception(f"Could not subscribe to user ({no_subscribe_reason}).")
 
 
-def subscribe_to_multiple_users(driver: Chrome, users: List[str]) -> None:
+def subscribe_to_multiple_users(account: str, driver: Chrome, users: List[str]) -> None:
+    account_stats = AccountActionStats(account)
     for user in users:
-        subscribe_to_user(driver, user)
+        _subscribe_to_user(driver, user, account_stats)
         time.sleep(2)
 
 
