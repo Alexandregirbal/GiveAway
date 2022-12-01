@@ -1,21 +1,31 @@
+import os
 from time import sleep
 import time
 from typing import List
 
-from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service as ChromeService
-from services.instagram.classes import AccountActionStats
-from services.instagram.exceptions import BlockedByInstagramException
-from services.instagram.utils import driver_get_if_not_here_already, get_post_url_from_id
 
 from src.configs.selenium_options import CHROMEDRIVER_PATH
-import src.configs.environment_variables as env
+from src.configs.environment_variables import PROJECT_ROOT
+from src.services.instagram.classes import AccountActionStats
+from src.services.instagram.exceptions import BlockedByInstagramException
+from src.services.instagram.utils import driver_get_if_not_here_already, get_post_url_from_id
 
 def connect(username: str, password: str) -> Chrome:
-    """Connects to Instagram with user credentials"""
-    driver = Chrome(service= ChromeService(CHROMEDRIVER_PATH))
+    """Connects to Instagram with user credentials. Uses the same chrome user every time."""
+    print("Connecting to Instagram with user:", username)
+    chrome_options = ChromeOptions()
+    browser_cache_folder = os.path.join(PROJECT_ROOT, "browser-cache")
+    chrome_options.add_argument(f"--user-data-dir={browser_cache_folder}")
+    chrome_options.add_argument(f"--profile-directory={username}")
+
+    driver = Chrome(
+        service=ChromeService(CHROMEDRIVER_PATH),
+        options=chrome_options,
+    )
     driver.get("https://www.instagram.com/")
     driver.implicitly_wait(5)
     
@@ -25,9 +35,14 @@ def connect(username: str, password: str) -> Chrome:
     except NoSuchElementException:
         pass
     
-    driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
-    driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
-    login_element = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    try:
+        driver.find_element(By.CSS_SELECTOR, "input[name='username']").send_keys(username)
+        driver.find_element(By.CSS_SELECTOR, "input[name='password']").send_keys(password)
+        login_element = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    except NoSuchElementException:
+        print("Already logged in.")
+        return driver
+    
     try: 
         login_element.click()
     except ElementClickInterceptedException:
@@ -61,7 +76,7 @@ def comment_post(driver: Chrome, post_id:str, comment: str) -> None:
         - None if everything went well
     """
     driver_get_if_not_here_already(driver, get_post_url_from_id(post_id))
-    driver.implicitly_wait(5)
+    time.sleep(5)
     
     driver.find_element(
         By.CSS_SELECTOR,
@@ -133,4 +148,4 @@ def subscribe_to_multiple_users(account: str, driver: Chrome, users: List[str]) 
 
 
 if __name__ == '__main__':
-    connect(env.INSTA_USERNAME, env.INSTA_PASSWORD)
+    connect("Test", "Test")
