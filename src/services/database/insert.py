@@ -15,7 +15,7 @@ def insert_data(table: str, data: List[dict] | dict ) -> None:
     table_filepath = os.path.join(PROJECT_ROOT, "database", f"{table}.csv")
     if not os.path.exists(table_filepath):
         with open(table_filepath, "w") as file:
-            file.write(";".join(MANDATORY_FIELDS.get("giveaways")+["insert_datetime"]))
+            file.write(";".join(MANDATORY_FIELDS.get(table)+["insert_datetime"]))
             file.write("\n")
     
     with open(table_filepath, "a") as file:

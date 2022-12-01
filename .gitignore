@@ -130,5 +130,11 @@ dmypy.json
 
 # Selenium
 chromedriver
+browser-cache/**
 
 /database
+
+*.cred.json
+!template.*
+
+!*/.gitkeep

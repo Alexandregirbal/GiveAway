@@ -1,9 +1,9 @@
-import json
 import os
 from random import shuffle
 from typing import List
 
 from configs.environment_variables import PROJECT_ROOT
+from utils.files import load_json_file
 
 ### CONSTANTS ###
 
@@ -12,23 +12,15 @@ MAX_NUMBER_OF_SUBSCIRBTIONS_PER_GIVEAWAY = 5
 
 ### FROM FILES ###
 
-def _load_json_file(file_path: str) -> dict:
-    """Loads a json file and returns its content"""
-    with open(file_path) as json_file:
-        json_content = json_file.read()
-
-    return json.loads(json_content)
-
-
 def _get_friends_from_json() -> List[dict]:
     friends_file_path = os.path.join(PROJECT_ROOT, 'src', "constants", "friends.json")
-    friends = _load_json_file(friends_file_path)
+    friends = load_json_file(friends_file_path)
     return friends
 
 
 def _get_comments_from_json() -> List[dict]:
     comments_file_path = os.path.join(PROJECT_ROOT, 'src', "constants", "comments.json")
-    comments = _load_json_file(comments_file_path)
+    comments = load_json_file(comments_file_path)
     return comments
 
 
