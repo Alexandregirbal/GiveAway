@@ -4,6 +4,7 @@ import time
 from typing import List
 
 from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -78,15 +79,18 @@ def comment_post(driver: Chrome, post_id:str, comment: str) -> None:
     driver_get_if_not_here_already(driver, get_post_url_from_id(post_id))
     time.sleep(5)
     
-    driver.find_element(
+    comment_text_area = driver.find_element(
         By.CSS_SELECTOR,
         "form[method='post'] textarea" # Comment input
-    ).send_keys(comment)
+    )
+    comment_text_area.click()
+    ActionChains(driver).send_keys(comment).perform()
+    # comment_text_area.send_keys(comment)
     time.sleep(1)
     
     driver.find_element(
         By.CSS_SELECTOR,
-        "button[type='submit']" # Post button
+        "form div[role='button']" # Post button
     ).click()
     
     print("Comment sent with success.")
