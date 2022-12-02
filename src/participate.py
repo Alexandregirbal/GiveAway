@@ -29,7 +29,7 @@ def participate_to_giveaway(
     
     comment = get_random_comments()[0]
     friends = get_random_friends()
-    full_comment = comment + " ".join(friends)
+    full_comment = comment + " " + " ".join(friends)
     comment_post(
         connected_account_driver,
         post_id, full_comment
